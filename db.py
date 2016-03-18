@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Date, Unicode, DateTime
 # from sqlalchemy.orm import sessionmaker
 # path to database
-dburl = 'sqlite:///dbpower_mmi.db'
+dburl = 'sqlite:///master.db'
 engine = create_engine(dburl)
 Base = declarative_base()
 
