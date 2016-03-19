@@ -28,8 +28,9 @@ def grab_dbpower(sess,datafile=''):
     date_xpath = '//*[@id="column_left"]/article/div/div[2]/div/text()'
     last_updated = re.sub('^[^0-9]+','',tree.xpath(date_xpath).pop())
     last_updated = datetime.datetime.strptime(last_updated,"%Y-%m-%d %H:%M")
-    #print(last_update.isoformat())
-    for i in range(1,len(table[0])+1):
+# ----- For time saving during development -----
+#   for i in range(1,len(table[0])+1):
+    for i in range(1,100):
         dr = DailyRecord()
         dr.date = last_updated.date()
         dr.ticker = tree.xpath('//*[@id="column_left"]/article/div/div[1]/table/tbody/tr[%d]/td[1]/a/text()' % i).pop()
@@ -46,6 +47,8 @@ def grab_dbpower(sess,datafile=''):
         dr.sell_turnover = int(float(tree.xpath('//*[@id="column_left"]/article/div/div[1]/table/tbody/tr[%d]/td[8]/text()' % i).pop())*1000000)
         dr.spec_volume = int(float(tree.xpath('//*[@id="column_left"]/article/div/div[1]/table/tbody/tr[%d]/td[9]/text()' % i).pop())*1000000)
         dr.spec_turnover = int(float(tree.xpath('//*[@id="column_left"]/article/div/div[1]/table/tbody/tr[%d]/td[10]/text()' % i).pop())*1000000)
+        if(dr.buy_turnover > 0 or dr.sell_turnover > 0):
+            dr.buysell_ratio = dr.buy_turnover*1.0 / (dr.buy_turnover*1.0 + dr.sell_turnover*1.0)
         sess.add(dr)
     sess.commit()
 

@@ -5,7 +5,7 @@
 # using dataset
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date, Unicode, DateTime
+from sqlalchemy import Column, Integer, String, Date, Unicode, DateTime, Float
 # from sqlalchemy.orm import sessionmaker
 # path to database
 dburl = 'sqlite:///master.db'
@@ -26,6 +26,7 @@ class DailyRecord(Base):
     sell_turnover = Column(Integer, nullable=False)
     spec_volume = Column(Integer, nullable=False)
     spec_turnover = Column(Integer, nullable=False)
+    buysell_ratio = Column(Float, nullable=True)
 
 class UpdateLog(Base):
     __tablename__ = 'updatelog'
