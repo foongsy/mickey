@@ -1,15 +1,6 @@
-#!/usr/bin/env python
-# coding=UTF-8
-
-# import sys, os
-# using dataset
-from sqlalchemy import create_engine
+#from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Date, Unicode, DateTime, Float
-# from sqlalchemy.orm import sessionmaker
-# path to database
-dburl = 'sqlite:///master.db'
-engine = create_engine(dburl)
 Base = declarative_base()
 
 class DailyRecord(Base):
@@ -41,6 +32,3 @@ class StockIndex(Base):
     ticker = Column(String(6), nullable=False)
     name = Column(Unicode(64),nullable=False)
     last_updated = Column(DateTime, nullable=False)
-
-Base.metadata.bind = engine
-Base.metadata.create_all()
