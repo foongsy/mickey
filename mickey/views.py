@@ -17,5 +17,5 @@ Base.metadata.create_all(engine)
 def index():
     s = session()
     last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
-    todaytop = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.date == last_updated).all()
+    todaytop = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.turnover >= 3000000, DailyRecord.date == last_updated).all()
     return render_template('dashboard.html',todaytop=todaytop,last_updated=last_updated)

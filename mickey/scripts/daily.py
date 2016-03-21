@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # coding=UTF-8
-'''
 import os, io, sys, datetime, codecs, requests, re, datetime
 from lxml import html
-from db import DailyRecord, Base, engine
+from mickey.models import DailyRecord, Base
+'''
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -29,8 +30,8 @@ def grab_dbpower(sess,datafile=''):
     last_updated = re.sub('^[^0-9]+','',tree.xpath(date_xpath).pop())
     last_updated = datetime.datetime.strptime(last_updated,"%Y-%m-%d %H:%M")
 # ----- For time saving during development -----
-#   for i in range(1,len(table[0])+1):
-    for i in range(1,100):
+#    for i in range(1,100):
+    for i in range(1,len(table[0])+1):
         dr = DailyRecord()
         dr.date = last_updated.date()
         dr.ticker = tree.xpath('//*[@id="column_left"]/article/div/div[1]/table/tbody/tr[%d]/td[1]/a/text()' % i).pop()
@@ -51,16 +52,3 @@ def grab_dbpower(sess,datafile=''):
             dr.buysell_ratio = dr.buy_turnover*1.0 / (dr.buy_turnover*1.0 + dr.sell_turnover*1.0)
         sess.add(dr)
     sess.commit()
-'''
-if(len(sys.argv) > 1):
-    datafile = sys.argv.pop()
-    if os.path.isfile(datafile):
-        print("working with datafile %s" % datafile)
-        grab_dbpower(Session,datafile)
-    else:
-        print("working WITHOUT datafile %s" % datafile)
-        grab_dbpower(Session)
-else:
-    print("working with URL")
-    grab_dbpower(Session)
-'''
