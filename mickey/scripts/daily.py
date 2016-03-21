@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding=UTF-8
-
+'''
 import os, io, sys, datetime, codecs, requests, re, datetime
 from lxml import html
 from db import DailyRecord, Base, engine
@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 Base.metadata.bind = engine
 _Session = sessionmaker(bind=engine)
 Session = _Session()
-
+'''
 def grab_dbpower(sess,datafile=''):
     rightnow = datetime.datetime.now()
     if(os.path.isfile(datafile)):
@@ -51,7 +51,7 @@ def grab_dbpower(sess,datafile=''):
             dr.buysell_ratio = dr.buy_turnover*1.0 / (dr.buy_turnover*1.0 + dr.sell_turnover*1.0)
         sess.add(dr)
     sess.commit()
-
+'''
 if(len(sys.argv) > 1):
     datafile = sys.argv.pop()
     if os.path.isfile(datafile):
@@ -63,3 +63,4 @@ if(len(sys.argv) > 1):
 else:
     print("working with URL")
     grab_dbpower(Session)
+'''

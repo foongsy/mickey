@@ -16,5 +16,6 @@ Base.metadata.create_all(engine)
 @app.route('/')
 def index():
     s = session()
-    todaytop = s.query(DailyRecord).filter(DailyRecord.buysell_ratio>0.9)
-    return render_template('dashboard.html',todaytop=todaytop)
+    last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
+    todaytop = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.date == last_updated).all()
+    return render_template('dashboard.html',todaytop=todaytop,last_updated=last_updated)

@@ -92,7 +92,7 @@
                     系統更新
                 </div>
                 <div class="panel-body">
-                    <p>Total recors in database: {{ todaytop|length }}</p>
+                    <p>Total records in database: </p>
                 </div>
             </div>
             <!-- /.row -->
@@ -100,7 +100,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            上日主動買盤資料 ({{last_updated}})
+                            上日主動買盤資料 (最後更新: {{last_updated}})
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -115,7 +115,7 @@
                                             <th colspan="2">主動買盤</th>
                                             <th colspan="2">主動沽盤</th>
                                             <th colspan="2">特別盤</th>
-                                            <th colspan="2">累積動力指標</th>
+                                            <th rowspan="2">主被動比例</th>
                                         </tr>
                                         <tr>
                                             <th>成交量<br />(百萬股)</th>
@@ -124,11 +124,24 @@
                                             <th>成交金額<br />(百萬)</th>
                                             <th>成交量<br />(百萬股)</th>
                                             <th>成交金額<br />(百萬)</th>
-                                            <th>主動買盤<br />(%)</th>
-                                            <th>主動沽盤<br />(%)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                      {% for record in todaytop %}
+                                        <tr>
+                                          <td>{{ record.ticker }}</td>
+                                          <td>{{ record.name }}</td>
+                                          <td class="text-right">{{ "{:,d}".format(record.volume) }}</td>
+                                          <td class="text-right">{{ "${:,d}".format(record.turnover) }}</td>
+                                          <td class="text-right">{{ "{:,d}".format(record.buy_volume) }}</td>
+                                          <td class="text-right">{{ "${:,d}".format(record.buy_turnover) }}</td>
+                                          <td class="text-right">{{ "{:,d}".format(record.sell_volume) }}</td>
+                                          <td class="text-right">{{ "${:,d}".format(record.sell_turnover) }}</td>
+                                          <td class="text-right">{{ "{:,d}".format(record.spec_volume) }}</td>
+                                          <td class="text-right">{{ "${:,d}".format(record.spec_turnover) }}</td>
+                                          <td>{{ "{:.0f}%".format(record.buysell_ratio*100) }}</td>
+                                        </tr>
+                                      {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
