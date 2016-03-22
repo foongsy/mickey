@@ -51,7 +51,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">project mickey</a>
+                <a class="navbar-brand" href="{{ url_for('index') }}">project mickey</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -60,15 +60,10 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="{{url_for('index')}}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Reports<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="{{url_for('custom')}}">Custom Report</a>
-                                </li>
-                            </ul>
+                            <a href="{{url_for('custom')}}"><i class="fa fa-book fa-fw"></i> Custom Reports</span></a>
                         </li>
                     </ul>
                 </div>
@@ -90,21 +85,34 @@
             <!-- /.row -->
             {% if posted == False %}
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <form method="POST" action="">
-                                {{form.days.label}} {{form.days}}
-                                <br/>
-                                {{form.turnover_threshold.label}} {{form.turnover_threshold(size=5)}}
-                                <br/>
-                                {{form.buysellratio_threshold.label}} {{form.buysellratio_threshold(size=5)}}
-                                <br />
-                                <input type="submit" value="Go">
+              <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-lg-12">
+                            <form method="POST" class="form-horizontal" action="{{url_for('custom')}}" role="form">
+                                <div class="form-group">
+                                    {{form.days.label}}
+                                    {{form.days}}
+                                </div>
+                                <br/ >
+                                <div class="input-group">
+                                    <input type="text" name="turnover_threshold" id="turnover_threshold" placeholder="Minimum Turnover" class="form-control"/>
+                                    <span class="input-group-addon">Millions</span>
+                                </div>
+                                <br/ >
+                                <div class="input-group">
+                                    <input type="text" name="buysellratio_threshold" id="buysellratio_threshold" placeholder="Minimum Buy/Sell Ratio" class="form-control"/>
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                                <br/ >
+                                <div class="form-group">
+                                    <input type="submit" value="Go">
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
+              </div>
             </div>
             {% else %}
             <div class="row">

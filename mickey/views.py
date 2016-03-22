@@ -20,7 +20,7 @@ s = session()
 # Form for custom search
 class CustomSearch(Form):
     days = SelectField(u'How many days back?',choices=[(1,'1'),(3,'3'),(5,'5'),(10,'10')],validators=[DataRequired()])
-    turnover_threshold = IntegerField('Minimum Turnover',validators=[DataRequired(),NumberRange(min=0,max=100,message='Must be between 0 and 100')])
+    turnover_threshold = IntegerField('Minimum Turnover',validators=[DataRequired(),NumberRange(min=0,message='Cannot be empty or negative')])
     buysellratio_threshold = IntegerField('Minimum Buy/Sell Ratio',validators=[DataRequired(),NumberRange(min=0,max=100,message='Must be between 0 and 100')])
 
 @app.route('/')
