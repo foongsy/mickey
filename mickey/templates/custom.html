@@ -90,6 +90,7 @@
                     <div class="panel-body">
                         <div class="col-lg-12">
                             <form method="POST" class="form-horizontal" action="{{url_for('custom')}}" role="form">
+                                {{ form.csrf_token }}
                                 <div class="form-group">
                                     {{form.days.label}}
                                     {{form.days}}
@@ -146,7 +147,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      {% for record in todaytop %}
+                                      {% for record in tabledata %}
                                         <tr>
                                           <td>{{ record.ticker }}</td>
                                           <td>{{ record.name }}</td>
