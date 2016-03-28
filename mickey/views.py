@@ -2,11 +2,15 @@ from mickey import app
 from flask import render_template, request
 from flask_wtf import Form
 from sqlalchemy import create_engine
+from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects import sqlite
 from mickey.models import DailyRecord
 from wtforms import SelectField, IntegerField, validators
 from wtforms.validators import DataRequired, NumberRange
+from datetime import date
+import datetime
 
 app.secret_key = "hafamily"
 
@@ -48,21 +52,31 @@ def custom():
             buysell_ratio = form.buysellratio_threshold.data / 100.0
             turnover = form.turnover_threshold.data * 1000000
             tabledata = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > buysell_ratio, DailyRecord.turnover >= turnover, DailyRecord.date == last_updated).all()
-            posted=True
-            return render_template('custom.html',form=form,posted=posted,tabledata=tabledata,last_updated=last_updated)
+            multipledays=False
+            return render_template('custom.html',form=form,multipledays=multipledays,tabledata=tabledata,last_updated=last_updated)
         # Asks for multiple days data
         elif form.days.data > 1:
             numofdays = form.days.data
-            predates = s.query(DailyRecord).order_by(DailyRecord.date.desc()).all()[:numofdays]
+            predates = s.query(DailyRecord.date).distinct(DailyRecord.date.name).order_by(DailyRecord.date.desc()).limit(numofdays).all()
             dates=[]
-            for d in predates:
-                dates.append(d.date)
-            print dates
+            for row in predates:
+                dates.append(row.date)
             buysell_ratio = form.buysellratio_threshold.data / 100.0
             turnover = form.turnover_threshold.data * 1000000
-            tabledata = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > buysell_ratio, DailyRecord.turnover >= turnover, DailyRecord.date in dates).all()
-            posted = True
-            return render_template('custom.html',form=form,posted=posted,tabledata=tabledata,last_updated=last_updated)
+            q = s.query(
+                DailyRecord.name,DailyRecord.ticker,
+                func.sum(DailyRecord.volume).label("total_volume"),
+                func.sum(DailyRecord.turnover).label("total_turnover"),
+                func.sum(DailyRecord.buy_turnover).label("total_buyturnover"),
+                func.sum(DailyRecord.sell_turnover).label("total_sellturnover")).filter(
+                DailyRecord.date.between(dates[len(dates)-1],dates[0])).group_by(
+                DailyRecord.ticker).having(
+                '(total_buyturnover*1.0 / total_turnover*1.0) >= %f' % buysell_ratio).having(
+                'total_turnover >= %d*%d' % (numofdays,turnover)
+            )
+            tabledata = q.all()
+            multipledays=True
+            return render_template('custom.html',form=form,multipledays=multipledays,tabledata=tabledata,last_updated=last_updated,numofdays=numofdays,turnover=turnover,buysell_ratio=buysell_ratio)
     else:
         for e in form.errors:
             print "FORM:" + e
@@ -72,5 +86,4 @@ def custom():
             print "turnover_threshold: "+e
         for e in form.buysellratio_threshold.errors:
             print "buysellratio_threshold: "+e
-        posted = False
-        return render_template('custom.html',form=form,posted=posted,last_updated=last_updated)
+        return render_template('custom.html',form=form,last_updated=last_updated)
