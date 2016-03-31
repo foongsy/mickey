@@ -17,10 +17,19 @@ if __name__ == '__main__':
         datafile = sys.argv.pop()
         if os.path.isfile(datafile):
             print("Working with datafile %s" % datafile)
-            grab_dbpower(Session,datafile)
+            if(not grab_dbpower(Session,datafile)):
+                print "Database not updated"
+            else:
+                print "Database updated"
         else:
             print("Working WITHOUT datafile %s" % datafile)
-            grab_dbpower(Session)
+            if(not grab_dbpower(Session)):
+                print "Database not updated"
+            else:
+                print "Database updated"
     else:
         print("Working with URL")
-        grab_dbpower(Session)
+        if(not grab_dbpower(Session)):
+            print "Database not updated"
+        else:
+            print "Database updated"
