@@ -1,19 +1,11 @@
 #!/usr/bin/env python
 # coding=UTF-8
-import os, io, sys, datetime, codecs, requests, re, datetime
+import os, io, sys, datetime, codecs, requests, re
 from lxml import html
 from mickey.models import DailyRecord, Base
-'''
+from sqlalchemy import func
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-Base.metadata.bind = engine
-_Session = sessionmaker(bind=engine)
-Session = _Session()
-'''
 def grab_dbpower(sess,datafile=''):
-    rightnow = datetime.datetime.now()
     if(os.path.isfile(datafile)):
         f = open(datafile,'r')
         tree = html.fromstring(f.read())
@@ -29,8 +21,10 @@ def grab_dbpower(sess,datafile=''):
     date_xpath = '//*[@id="column_left"]/article/div/div[2]/div/text()'
     last_updated = re.sub('^[^0-9]+','',tree.xpath(date_xpath).pop())
     last_updated = datetime.datetime.strptime(last_updated,"%Y-%m-%d %H:%M")
-# ----- For time saving during development -----
-#    for i in range(1,100):
+    # Get if the data date is already in database
+    r = s.query(func.count(distinct(DailyRecord.ticker))).filter(DailyRecord.date == last_updated)
+    print(r)
+    '''
     for i in range(1,len(table[0])+1):
         dr = DailyRecord()
         dr.date = last_updated.date()
@@ -52,3 +46,4 @@ def grab_dbpower(sess,datafile=''):
             dr.buysell_ratio = dr.buy_turnover*1.0 / (dr.buy_turnover*1.0 + dr.sell_turnover*1.0)
         sess.add(dr)
     sess.commit()
+    '''
