@@ -42,6 +42,10 @@ def index():
     todaytop = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.turnover >= 3000000, DailyRecord.date == last_updated).all()
     return render_template('dashboard.html',todaytop=todaytop,last_updated=last_updated)
 
+@app.route('/test')
+def test():
+    return render_template('skeleton.html')
+
 @app.route('/custom', methods=['GET','POST'])
 def custom():
     last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
