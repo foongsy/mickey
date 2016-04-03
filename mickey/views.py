@@ -39,12 +39,8 @@ class CustomSearch(Form):
 @app.route('/')
 def index():
     last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
-    todaytop = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.turnover >= 3000000, DailyRecord.date == last_updated).all()
-    return render_template('dashboard.html',todaytop=todaytop,last_updated=last_updated)
-
-@app.route('/test')
-def test():
-    return render_template('skeleton.html')
+    pt_table = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.turnover >= 3000000, DailyRecord.date == last_updated).all()
+    return render_template('index.html',request=request,pt_table=pt_table,last_updated=last_updated)
 
 @app.route('/custom', methods=['GET','POST'])
 def custom():
@@ -55,9 +51,9 @@ def custom():
         if form.days.data == 1:
             buysell_ratio = form.buysellratio_threshold.data / 100.0
             turnover = form.turnover_threshold.data * 1000000
-            tabledata = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > buysell_ratio, DailyRecord.turnover >= turnover, DailyRecord.date == last_updated).all()
+            pt_table = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > buysell_ratio, DailyRecord.turnover >= turnover, DailyRecord.date == last_updated).all()
             multipledays=False
-            return render_template('custom.html',form=form,multipledays=multipledays,tabledata=tabledata,last_updated=last_updated)
+            return render_template('custom.html',request=request,form=form,multipledays=multipledays,pt_table=pt_table,last_updated=last_updated)
         # Asks for multiple days data
         elif form.days.data > 1:
             numofdays = form.days.data
@@ -78,9 +74,9 @@ def custom():
                 '(total_buyturnover*1.0 / total_turnover*1.0) >= %f' % buysell_ratio).having(
                 'total_turnover >= %d*%d' % (numofdays,turnover)
             )
-            tabledata = q.all()
+            pt_table = q.all()
             multipledays=True
-            return render_template('custom.html',form=form,multipledays=multipledays,tabledata=tabledata,last_updated=last_updated,numofdays=numofdays,turnover=turnover,buysell_ratio=buysell_ratio)
+            return render_template('custom.html',request=request,form=form,multipledays=multipledays,pt_table=pt_table,last_updated=last_updated,numofdays=numofdays,turnover=turnover,buysell_ratio=buysell_ratio)
     else:
         for e in form.errors:
             print "FORM:" + e
@@ -90,4 +86,8 @@ def custom():
             print "turnover_threshold: "+e
         for e in form.buysellratio_threshold.errors:
             print "buysellratio_threshold: "+e
-        return render_template('custom.html',form=form,last_updated=last_updated)
+        return render_template('custom.html',request=request,form=form,last_updated=last_updated)
+
+@app.route('/export')
+def export():
+    return render_template('export.html')

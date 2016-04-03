@@ -1,0 +1,30 @@
+<table class="table table-striped table-hover table-bordered" id="pt_table">
+    <thead>
+        <tr>
+            <th>Ticker</th>
+            <th>Name</th>
+            <th>Vol</th>
+            <th>T/O (M)</th>
+            <th>Bid Vol</th>
+            <th>Bid T/O (M)</th>
+            <th>Ask Vol</th>
+            <th>Ask T/O (M)</th>
+            <th>B/A Ratio</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for record in pt_table %}
+        <tr>
+          <td>{{ record.ticker }}</td>
+          <td>{{ record.name }}</td>
+          <td class="text-right">{{ "{:,d}".format(record.volume) }}</td>
+          <td class="text-right">{{ "{:,.1f}".format(record.turnover/1000000) }}</td>
+          <td class="text-right">{{ "{:,d}".format(record.buy_volume) }}</td>
+          <td class="text-right">{{ "{:,.1f}".format(record.buy_turnover/1000000) }}</td>
+          <td class="text-right">{{ "{:,d}".format(record.sell_volume) }}</td>
+          <td class="text-right">{{ "{:,.1f}".format(record.sell_turnover/1000000) }}</td>
+          <td>{{ "{:.0f}%".format(record.buysell_ratio*100) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
