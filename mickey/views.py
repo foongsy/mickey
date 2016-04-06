@@ -95,9 +95,16 @@ def export():
     dates=[]
     for row in predates:
         dates.append(row.date)
-    results = s.query(
-        DailyRecord.name,DailyRecord.ticker,DailyRecord.date,DailyRecord.buysell_ratio).filter(
-        DailyRecord.date.between(dates[len(dates)-1],dates[0]),DailyRecord.buysell_ratio is not None).all()
+        results = s.query(
+            DailyRecord.name,DailyRecord.ticker,DailyRecord.date,DailyRecord.buysell_ratio).filter(
+            DailyRecord.date.between(dates[len(dates)-1],dates[0]),DailyRecord.buysell_ratio != None).all()
+    pt_table = {}
+    namelist = {}
     for r in results:
-        print r.ticker
-    return render_template('export.html',request=request,last_updated=last_updated)
+        #print "%s %s %s %s" % (r.ticker, r.name, r.date, r.buysell_ratio)
+        if r.ticker in pt_table:
+            pt_table[r.ticker].update({r.date:r.buysell_ratio*100})
+        else:
+            pt_table[r.ticker] = {r.date:r.buysell_ratio*100}
+            namelist[r.ticker] = r.name
+    return render_template('export.html',request=request,dates=dates,namelist=namelist,last_updated=last_updated,pt_table=pt_table)
