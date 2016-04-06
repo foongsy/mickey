@@ -1,0 +1,30 @@
+{% extends "skeleton.html" %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/dt-1.10.11,b-1.1.2,b-html5-1.1.2,r-2.0.2/datatables.min.css"/>
+{% endblock %}
+{% block content %}
+<h3>
+  Dashboard
+</h3>
+<p>
+  <small>Last updated on: {{last_updated}}</small>
+</p>
+<div class="row">
+  {% include 'table.html' %}
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="https://cdn.datatables.net/t/bs/dt-1.10.11,b-1.1.2,b-html5-1.1.2,r-2.0.2/datatables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#pt_table').DataTable({
+        dom: 'lfrtipB',
+        buttons: [ {
+            extend: 'csvHtml5',
+            text: 'Export to CSV'
+        }],
+        responsive: true
+    });
+});
+</script>
+{% endblock %}

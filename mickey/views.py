@@ -90,4 +90,14 @@ def custom():
 
 @app.route('/export')
 def export():
-    return render_template('export.html')
+    last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
+    predates = s.query(DailyRecord.date).distinct(DailyRecord.date.name).order_by(DailyRecord.date.desc()).limit(5).all()
+    dates=[]
+    for row in predates:
+        dates.append(row.date)
+    results = s.query(
+        DailyRecord.name,DailyRecord.ticker,DailyRecord.date,DailyRecord.buysell_ratio).filter(
+        DailyRecord.date.between(dates[len(dates)-1],dates[0]),DailyRecord.buysell_ratio is not None).all()
+    for r in results:
+        print r.ticker
+    return render_template('export.html',request=request,last_updated=last_updated)
