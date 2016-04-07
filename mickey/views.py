@@ -93,7 +93,7 @@ def custom():
 @app.route('/export')
 def export():
     last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
-    predates = s.query(DailyRecord.date).distinct(DailyRecord.date.name).order_by(DailyRecord.date.desc()).limit(5).all()
+    predates = s.query(DailyRecord.date).distinct(DailyRecord.date.name).order_by(DailyRecord.date.desc()).limit(10).all()
     dates=[]
     for row in predates:
         dates.append(row.date)
