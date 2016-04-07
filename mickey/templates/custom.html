@@ -80,14 +80,14 @@
                         {% for record in pt_table %}
                           <tr>
                             <td>{{ record.ticker }}</td>
-                            <td>{{ record.name }}</td>
+                            <td><a target="_blank" href="http://www.dbpower.com.hk/ch/quote/quote-stock-daily-mmi/code/{{"{:0<5}".format(record.ticker)}}">{{ record.name }}</a></td>
                             <td class="text-right">{{ "{:,d}".format(record.total_volume) }}</td>
-                            <td class="text-right">{{ "${:,d}".format(record.total_turnover) }}</td>
-                            <td class="text-right"></td>
-                            <td class="text-right">{{ "${:,d}".format(record.total_buyturnover) }}</td>
-                            <td class="text-right"></td>
-                            <td class="text-right">{{ "${:,d}".format(record.total_sellturnover) }}</td>
-                            <td class="text-right"></td>
+                            <td class="text-right">{{ "${:,.1f}".format(record.total_turnover/1000000) }}</td>
+                            <td class="text-right">{{ "{:,d}".format(record.total_buyvolume) }}</td>
+                            <td class="text-right">{{ "${:,.1f}".format(record.total_buyturnover/1000000) }}</td>
+                            <td class="text-right">{{ "{:,d}".format(record.total_sellvolume) }}</td>
+                            <td class="text-right">{{ "${:,.1f}".format(record.total_sellturnover/1000000) }}</td>
+                            <td class="text-right">{{ "{:.0f}%".format(record.total_buyturnover*100/record.total_turnover) }}</td>
                           </tr>
                         {% endfor %}
                       </tbody>
