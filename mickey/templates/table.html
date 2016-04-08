@@ -16,7 +16,7 @@
       {% for record in pt_table %}
         <tr>
           <td>{{ record.ticker }}</td>
-          <td><a target="_blank" href="http://www.dbpower.com.hk/ch/quote/quote-stock-daily-mmi/code/{{"{:0<5}".format(record.ticker)}}">{{ record.name }}</a></td>
+          <td><a target="_blank" href="{{url_for('t',ticker="{:0<5}".format(record.ticker))}}">{{ record.name }}</a></td>
           <td class="text-right">{{ "{:,d}".format(record.volume) }}</td>
           <td class="text-right">{{ "{:,.1f}".format(record.turnover/1000000) }}</td>
           <td class="text-right">{{ "{:,d}".format(record.buy_volume) }}</td>

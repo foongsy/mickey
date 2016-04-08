@@ -42,6 +42,22 @@ def index():
     pt_table = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.turnover >= 3000000, DailyRecord.date == last_updated).all()
     return render_template('index.html',request=request,pt_table=pt_table,last_updated=last_updated)
 
+@app.route('/t/<ticker>')
+def t(ticker):
+    last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
+    tickername = s.query(DailyRecord.name).filter(DailyRecord.ticker==ticker).order_by(DailyRecord.date.desc()).first()
+    predates = s.query(DailyRecord.date).distinct(DailyRecord.date.name).order_by(DailyRecord.date.desc()).limit(10).all()
+    dates=[]
+    for row in predates:
+        dates.append(row.date)
+    pretickerinfo = s.query(DailyRecord).filter(DailyRecord.ticker==ticker,DailyRecord.date.between(dates[len(dates)-1],dates[0])).all()
+    tickerinfo = {'date': [], 'buy_turnover': [], 'turnover': []}
+    for ti in pretickerinfo:
+        tickerinfo['date'].append(ti.date)
+        tickerinfo['buy_turnover'].append(ti.buy_turnover)
+        tickerinfo['turnover'].append(ti.turnover)
+    return render_template('ticker.html',request=request,last_updated=last_updated,ticker=ticker,tickerinfo=tickerinfo,tickername=tickername,dates=dates)
+
 @app.route('/custom', methods=['GET','POST'])
 def custom():
     last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
