@@ -55,7 +55,7 @@ def t(ticker):
     for ti in pretickerinfo:
         tickerinfo['date'].append(ti.date)
         tickerinfo['buy_turnover'].append(ti.buy_turnover)
-        tickerinfo['turnover'].append(ti.turnover)
+        tickerinfo['turnover'].append(ti.turnover - ti.buy_turnover)
     return render_template('ticker.html',request=request,last_updated=last_updated,ticker=ticker,tickerinfo=tickerinfo,tickername=tickername,dates=dates)
 
 @app.route('/custom', methods=['GET','POST'])

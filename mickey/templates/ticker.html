@@ -15,17 +15,17 @@
 <script src="{{url_for('static',filename='bower_components/chartist/dist/chartist.min.js')}}"></script>
 <script>
   var data = {
-    labels: ['{{ tickerinfo.date|reverse|join("' ,'")|safe }}'],
+    labels: ['{{ tickerinfo.date|join("' ,'")|safe }}'],
     series: [
-      [{{tickerinfo.buy_turnover|reverse|join(", ")}}],
-      [{{tickerinfo.turnover|reverse|join(", ")}}]
+      [{{tickerinfo.buy_turnover|join(", ")}}],
+      [{{tickerinfo.turnover|join(", ")}}]
     ]
   };
 
   var options = {
     stackBars: true,
     seriesBarDistance: 5,
-    reverseData: true,
+    reverseData: false,
     horizontalBars: true,
     axisY: {
       offset: 70
@@ -40,7 +40,7 @@
   new Chartist.Bar('#dachart',data,options).on('draw', function(data) {
   if(data.type === 'bar') {
     data.element.attr({
-      style: 'stroke-width: 50px'
+      style: 'stroke-width: 30px'
     });
   }
 });
