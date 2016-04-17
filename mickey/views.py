@@ -51,12 +51,7 @@ def t(ticker):
     for row in predates:
         dates.append(row.date)
     pretickerinfo = s.query(DailyRecord).filter(DailyRecord.ticker==ticker,DailyRecord.date.between(dates[len(dates)-1],dates[0])).all()
-    tickerinfo = {'date': [], 'buy_turnover': [], 'turnover': []}
-    for ti in pretickerinfo:
-        tickerinfo['date'].append(ti.date)
-        tickerinfo['buy_turnover'].append(ti.buy_turnover)
-        tickerinfo['turnover'].append(ti.turnover - ti.buy_turnover)
-    return render_template('ticker.html',request=request,last_updated=last_updated,ticker=ticker,tickerinfo=tickerinfo,tickername=tickername,dates=dates)
+    return render_template('ticker.html',request=request,last_updated=last_updated,ticker=ticker,pretickerinfo=reversed(pretickerinfo),tickername=tickername,dates=dates)
 
 @app.route('/custom', methods=['GET','POST'])
 def custom():

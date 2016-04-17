@@ -1,6 +1,5 @@
 {% extends "skeleton.html" %}
 {% block head %}
-<link rel="stylesheet" href="{{url_for('static',filename='bower_components/chartist/dist/chartist.min.css')}}">
 {% endblock %}
 {% block content %}
 <h3>
@@ -8,41 +7,33 @@
 </h3>
 <h4>{{tickername.name}} ({{ticker}})</h4>
 <div class="row">
-  <div class="ct-chart ct-golden-section" id="dachart"></div>
+  <div id="dachart"></div>
 </div>
 {% endblock %}
 {% block script %}
-<script src="{{url_for('static',filename='bower_components/chartist/dist/chartist.min.js')}}"></script>
-<script>
-  var data = {
-    labels: ['{{ tickerinfo.date|join("' ,'")|safe }}'],
-    series: [
-      [{{tickerinfo.buy_turnover|join(", ")}}],
-      [{{tickerinfo.turnover|join(", ")}}]
-    ]
-  };
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Date','Bid Turnover','Ask Turnover','Other Turnover'],
+      {% for p in pretickerinfo %}
+      ['{{p.date}}',{{p.buy_turnover}},{{p.sell_turnover}},{{p.spec_turnover}}],
+      {% endfor %}
+    ]);
 
-  var options = {
-    stackBars: true,
-    seriesBarDistance: 5,
-    reverseData: false,
-    horizontalBars: true,
-    axisY: {
-      offset: 70
-    },
-    axisX: {
-      labelInterpolationFnc: function(value) {
-        return (value / 1000000) + 'M';
-      }
-    }
-  };
+    var options = {
+      chartArea: {width: '85%'},
+      height: 600,
+      isStacked: true,
+      bar: {groupWidth: "50%"},
+      title: 'Bid/Ask Turnover Ratio',
+      legend: { position: "bottom" }
+    };
 
-  new Chartist.Bar('#dachart',data,options).on('draw', function(data) {
-  if(data.type === 'bar') {
-    data.element.attr({
-      style: 'stroke-width: 30px'
-    });
+    var chart = new google.visualization.BarChart(document.getElementById('dachart'));
+    chart.draw(data, options);
   }
-});
 </script>
 {% endblock %}
