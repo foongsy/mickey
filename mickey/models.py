@@ -19,6 +19,14 @@ class DailyRecord(Base):
     spec_turnover = Column(Integer, nullable=False)
     buysell_ratio = Column(Float, nullable=True)
 
+class WeeklyShortSell(Base):
+    __tablename__ = 'weeklyshortsell'
+    id = Column(Integer, primary_key=True)
+    date = Column(Date, nullable=False)
+    ticker = Column(String(6), nullable=False)
+    volume = Column(Integer, nullable=False)
+    turnover = Column(Integer, nullable=False)
+
 class UpdateLog(Base):
     __tablename__ = 'updatelog'
     id = Column(Integer, primary_key=True)
