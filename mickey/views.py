@@ -76,6 +76,7 @@ def custom():
             turnover = form.turnover_threshold.data * 1000000
             q = s.query(
                 DailyRecord.ticker,DailyRecord.name,DailyRecord.ticker,DailyRecord.buysell_ratio,
+                func.sum(DailyRecord.spec_turnover).label("total_spec_turnover"),
                 func.sum(DailyRecord.volume).label("total_volume"),
                 func.sum(DailyRecord.turnover).label("total_turnover"),
                 func.sum(DailyRecord.buy_volume).label("total_buyvolume"),

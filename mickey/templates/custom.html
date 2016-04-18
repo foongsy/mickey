@@ -67,13 +67,14 @@
                           <tr>
                               <th>Ticker</th>
                               <th>Name</th>
+                              <th>B/A %</th>
+                              <th>Spec %</th>
                               <th>Vol</th>
                               <th>T/O (M)</th>
                               <th>Bid Vol</th>
                               <th>Bid T/O (M)</th>
                               <th>Ask Vol</th>
                               <th>Ask T/O (M)</th>
-                              <th>B/A Ratio</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -81,13 +82,14 @@
                           <tr>
                             <td>{{ record.ticker }}</td>
                             <td><a target="_blank" href="{{url_for('t',ticker="{:0<5}".format(record.ticker))}}">{{ record.name }}</a></td>
+                            <td class="text-right">{{ "{:.0f}%".format(record.total_buyturnover*100/record.total_turnover) }}</td>
+                            <td class="text-right">{{ "{:.0f}%".format(record.total_spec_turnover*100/record.total_turnover) }}</td>
                             <td class="text-right">{{ "{:,d}".format(record.total_volume) }}</td>
                             <td class="text-right">{{ "${:,.1f}".format(record.total_turnover/1000000) }}</td>
                             <td class="text-right">{{ "{:,d}".format(record.total_buyvolume) }}</td>
                             <td class="text-right">{{ "${:,.1f}".format(record.total_buyturnover/1000000) }}</td>
                             <td class="text-right">{{ "{:,d}".format(record.total_sellvolume) }}</td>
                             <td class="text-right">{{ "${:,.1f}".format(record.total_sellturnover/1000000) }}</td>
-                            <td class="text-right">{{ "{:.0f}%".format(record.total_buyturnover*100/record.total_turnover) }}</td>
                           </tr>
                         {% endfor %}
                       </tbody>

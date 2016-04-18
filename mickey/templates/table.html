@@ -3,13 +3,15 @@
         <tr>
             <th>Ticker</th>
             <th>Name</th>
+            <th>B/A %</th>
+            <th>Spec. %</th>
             <th>Vol</th>
             <th>T/O (M)</th>
             <th>Bid Vol</th>
             <th>Bid T/O (M)</th>
             <th>Ask Vol</th>
             <th>Ask T/O (M)</th>
-            <th>B/A Ratio</th>
+            <th>Spec. T/O</th>
         </tr>
     </thead>
     <tbody>
@@ -17,13 +19,15 @@
         <tr>
           <td>{{ record.ticker }}</td>
           <td><a target="_blank" href="{{url_for('t',ticker="{:0<5}".format(record.ticker))}}">{{ record.name }}</a></td>
+          <td>{{ "{:.0f}%".format(record.buysell_ratio*100) }}</td>
+          <td>{{ "{:.0f}%".format(record.spec_turnover / record.turnover*100) }}</td>
           <td class="text-right">{{ "{:,d}".format(record.volume) }}</td>
           <td class="text-right">{{ "{:,.1f}".format(record.turnover/1000000) }}</td>
           <td class="text-right">{{ "{:,d}".format(record.buy_volume) }}</td>
           <td class="text-right">{{ "{:,.1f}".format(record.buy_turnover/1000000) }}</td>
           <td class="text-right">{{ "{:,d}".format(record.sell_volume) }}</td>
           <td class="text-right">{{ "{:,.1f}".format(record.sell_turnover/1000000) }}</td>
-          <td>{{ "{:.0f}%".format(record.buysell_ratio*100) }}</td>
+          <td class="text-right">{{ "{:,.1f}".format(record.spec_turnover/1000000) }}</td>
         </tr>
       {% endfor %}
     </tbody>
