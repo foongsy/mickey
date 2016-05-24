@@ -10,6 +10,24 @@
   <small>Last updated on: {{last_updated}}</small>
 </p>
 <div class="row">
+  <div class="col-lg-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        Search for individual ticker
+      </div>
+      <div class="panel-body">
+        <form method="POST">
+          {{ form.csrf_token }}
+          <div class="input-group">
+            <input type="text" id="ticker" name="ticker" />
+            <input type="submit" value="Search" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
   {% include 'table.html' %}
 </div>
 {% endblock %}

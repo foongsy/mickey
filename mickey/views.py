@@ -35,12 +35,23 @@ class CustomSearch(Form):
     buysellratio_threshold = IntegerField('Minimum Buy/Sell Ratio',
         validators=[NumberRange(min=0,max=100,message=u'Must be between 0 and 100')]
     )
+# Form for ticker search
+class TickerSearch(Form):
+    ticker = IntegerField(u'Ticker',
+        validators=[NumberRange(min=1,max=99999,message=u'Invalid ticker')]
+    )
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def index():
     last_updated = s.query(DailyRecord).order_by(DailyRecord.date.desc()).first().date
     pt_table = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.turnover >= 3000000, DailyRecord.date == last_updated).all()
-    return render_template('index.html',request=request,pt_table=pt_table,last_updated=last_updated)
+    form = TickerSearch(request.form)
+    if form.validate_on_submit():
+        print form.ticker.data
+    else:
+        for e in form.errors:
+            print "FORM:" + e
+    return render_template('index.html',request=request,pt_table=pt_table,last_updated=last_updated,form=form)
 
 @app.route('/t/<ticker>')
 def t(ticker):
