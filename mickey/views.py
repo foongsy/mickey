@@ -1,5 +1,5 @@
 from mickey import app
-from flask import render_template, request
+from flask import render_template, request, url_for, redirect, flash, get_flashed_messages
 from flask_wtf import Form
 from sqlalchemy import create_engine
 from sqlalchemy.sql import func
@@ -47,10 +47,16 @@ def index():
     pt_table = s.query(DailyRecord).filter(DailyRecord.buysell_ratio > 0.5, DailyRecord.turnover >= 3000000, DailyRecord.date == last_updated).all()
     form = TickerSearch(request.form)
     if form.validate_on_submit():
-        print form.ticker.data
+        ticker="{:0>5}".format(form.ticker.data)
+        if s.query(DailyRecord).filter(DailyRecord.ticker==ticker).count():
+            print url_for('t',ticker=ticker)
+            return redirect(url_for('t',ticker=ticker))
+        else:
+            print "not found"
+            flash('Ticker '+ticker+' not found')
     else:
         for e in form.errors:
-            print "FORM:" + e
+            flash('Invalid ticker format')
     return render_template('index.html',request=request,pt_table=pt_table,last_updated=last_updated,form=form)
 
 @app.route('/t/<ticker>')

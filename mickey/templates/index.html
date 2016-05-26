@@ -28,6 +28,15 @@
   </div>
 </div>
 <div class="row">
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+          {% for message in messages %}
+             <div class="alert alert-danger" role="alert">{{ message }}</div>
+          {% endfor %}
+       {% endif %}
+    {% endwith %}
+</div>
+<div class="row">
   {% include 'table.html' %}
 </div>
 {% endblock %}
@@ -43,6 +52,7 @@ $(document).ready(function() {
         }],
         responsive: true
     });
+    $('#ticker').focus();
 });
 </script>
 {% endblock %}
