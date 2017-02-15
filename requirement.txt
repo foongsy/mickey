@@ -1,0 +1,13 @@
+Flask==0.10.1
+Flask-WTF==0.12
+gunicorn==19.4.5
+itsdangerous==0.24
+Jinja2==2.8
+lxml==3.6.0
+MarkupSafe==0.23
+python-dateutil==2.5.2
+requests==2.9.1
+six==1.10.0
+SQLAlchemy==1.0.12
+Werkzeug==0.11.4
+WTForms==2.1
