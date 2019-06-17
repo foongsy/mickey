@@ -12,7 +12,7 @@ from wtforms.validators import DataRequired, NumberRange
 from datetime import date
 import datetime
 
-app.secret_key = "hafamily"
+app.secret_key = "please_replace_this_secret_key"
 
 # connecting to DATABASE
 engine = create_engine(app.config['DATABASE'])

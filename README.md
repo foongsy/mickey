@@ -1,10 +1,10 @@
 # Mickey
 
-Tiny personal script to grab data from [DB Power](http://www.dbpower.com). The data is considered useful to judge individual stock buy/sell momentum.
-
-(Only Hong Kong stocks are provided)
+Tiny personal script to grab stock buy/sell momentum data of Hong Kong stocks from [DB Power](http://www.dbpower.com.hk). Only Hong Kong stocks data are available.
 
 ## Getting Started
+
+*Please note that it's a personal project. While I will try my best to show how to configure the script, there is a good chance some custom config isn't listed. Please start new issues for problem experieced. Thanks.*
 
 The scripts has 2 parts:
 1) Cron scripts to grab data from DBPower
@@ -13,72 +13,60 @@ The scripts has 2 parts:
 ### Prerequisites
 
 - Python 3
-- packages listed in *requirements.txt*
+- packages listed in *./requirements.txt*
+- wget
+- SQLite
 
 
 ### Installing
 
 To install the crontab, please make sure the correct virtualenv path is included. Please refer to [this post](https://stackoverflow.com/questions/3287038/cron-and-virtualenv) for a proper setup.
 
-Daily script is located at package root named *dailyscript.py*. However a shell script *daily.sh* is created along with it for a easier cron job setup.
+Daily script is located at package root named *dailyscript.py*. However a shell script *daily.sh* is created along with it for a easier cron job setup. **Please make sure to edit the paths in *daily.sh* to get it work.**
 
-
-Make sure change the path in *daily.sh* to your local path.
+Default daily webpage grab are stored in:
 ```
-Give the example
+./mickey/powerticker/
 ```
+with name *%Y%m%d.html*
 
-And repeat
-
+Default SQLite database path is:
 ```
-until finished
+./master.db
 ```
+Please edit in *config.py* to change it.
 
-End with an example of getting some data out of the system or using it for a little demo
+### Deployment
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+There are two config files for minimal Gunicorn + Ngnix setup for reference, they are located at:
 ```
-Give an example
-```
+./mickey/scripts/mickey_gunicorn.conf  # Gunicorn config
+./mickey/scripts/mickey_nginx.conf  # Nginx config
+``` 
 
-### And coding style tests
+### Others
 
-Explain what these tests test and why
+Please note that *./weeklyscript.py* was never implemented. 
 
-```
-Give an example
-```
+### Built With
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Flask](http://flask.pocoo.org/) - The web framework used
+* [Bootstrap](https://getbootstrap.com/) - HTML frontend library
+* [SQLAlchemy](https://www.sqlalchemy.org/) - Database toolkit
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read *CONTRIBUTING.md* for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/foongsy/mickey). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Henry Fong** - *Initial work* - [foongsy](https://github.com/foongsy)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/foongsy/mickey/contributors) who participated in this project.
 
 ## License
 
