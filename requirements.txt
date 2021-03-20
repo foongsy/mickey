@@ -3,7 +3,7 @@ Flask==0.10.1
 Flask-WTF==0.12
 gunicorn==19.4.5
 itsdangerous==0.24
-Jinja2==2.8
+Jinja2==2.11.3
 lxml==3.6.0
 MarkupSafe==0.23
 packaging==16.8
